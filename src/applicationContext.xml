@@ -3,4 +3,12 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <!-- 该文件中产生的所有对象，被spring放入了一个称之为spring ioc容器的地方 -->
+    <!-- id：唯一标识符 class：指定类型 -->
+   <bean id="student" class="entity.Student">
+       <property name="stuNo" value="2"></property>
+       <property name="stuName" value="ls"></property>
+       <property name="stuAge" value="24"></property>
+   </bean>
+
 </beans>
