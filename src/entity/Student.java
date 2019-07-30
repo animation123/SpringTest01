@@ -1,5 +1,9 @@
 package entity;
 
+import newinstance.HtmlCourse;
+import newinstance.ICourse;
+import newinstance.JavaCourse;
+
 public class Student {
     private int stuNo;
     private String stuName;
@@ -32,5 +36,17 @@ public class Student {
     @Override
     public String toString() {
         return this.stuNo + "," + this.stuName + "," + this.stuAge;
+    }
+
+    // 学习Java课程
+    public void learnJava() {
+        ICourse course = new JavaCourse();
+        course.learn();
+    }
+
+    // 学习Java课程
+    public void learnHtml() {
+        ICourse course = new HtmlCourse();
+        course.learn();
     }
 }
