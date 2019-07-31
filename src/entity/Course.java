@@ -5,6 +5,14 @@ public class Course {
     private int courseHour;
     private Teacher teacher; // 授课老师，依赖于Teacher类
 
+    public Course() { }
+
+    public Course(String courseName, int courseHour, Teacher teacher) {
+        this.courseName = courseName;
+        this.courseHour = courseHour;
+        this.teacher = teacher;
+    }
+
     public String getCourseName() {
         return courseName;
     }

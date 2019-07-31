@@ -1,10 +1,14 @@
 package test;
 
+import entity.AllCollectionType;
+import entity.Course;
 import entity.Student;
 import factory.CourseFactory;
 import newinstance.ICourse;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import java.security.AllPermission;
 
 public class Test {
 
@@ -22,6 +26,18 @@ public class Test {
         student.learnJava();
     }
 
+    public static void collectionDemo() {
+        ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+        AllCollectionType type = (AllCollectionType) context.getBean("collectionDemo");
+        System.out.println(type);
+    }
+
+    public static void testDI() {
+        ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+        Course course = (Course) context.getBean("course");
+        course.showInfo();
+    }
+
     public static void learnCourseWithFactory() {
         Student student = new Student();
         student.learn("java");
@@ -37,6 +53,8 @@ public class Test {
     public static void main(String[] args) {
 //         learnCourse();
 //         learnCourseWithFactory();
-        learnCourseWithIOC();
+//        learnCourseWithIOC();
+//        testDI();
+        collectionDemo();
     }
 }
