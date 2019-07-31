@@ -15,4 +15,8 @@
        <property name="stuAge" value="24"></property>
    </bean>
 
+    <bean id="javaCourse" class="newinstance.JavaCourse"></bean>
+
+    <bean id="htmlCourse" class="newinstance.HtmlCourse"></bean>
+
 </beans>

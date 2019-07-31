@@ -1,7 +1,5 @@
 package newinstance;
 
-import java.util.Arrays;
-
 public class HtmlCourse implements ICourse {
     @Override
     public void learn() {

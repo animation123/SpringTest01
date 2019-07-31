@@ -5,8 +5,6 @@ import newinstance.HtmlCourse;
 import newinstance.ICourse;
 import newinstance.JavaCourse;
 
-import javax.swing.plaf.ColorUIResource;
-
 public class Student {
     private int stuNo;
     private String stuName;
