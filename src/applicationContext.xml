@@ -6,6 +6,10 @@
     <!-- 该文件中产生的所有对象，被spring放入了一个称之为spring ioc容器的地方 -->
     <!-- id：唯一标识符 class：指定类型 -->
    <bean id="student" class="entity.Student">
+       <!-- property:该class所代表的类的属性
+            name：属性名
+            value:属性值
+        -->
        <property name="stuNo" value="2"></property>
        <property name="stuName" value="ls"></property>
        <property name="stuAge" value="24"></property>

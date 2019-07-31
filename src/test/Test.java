@@ -1,23 +1,34 @@
 package test;
 
 import entity.Student;
+import factory.CourseFactory;
+import newinstance.ICourse;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class Test {
-    public static void main(String[] args) {
-//        Student student = new Student();
-//        student.setStuNo(1);
-//        student.setStuName("zs");
-//        student.setStuAge(23);
-//        System.out.println(student);
 
-        // Spring上下文对象
-        ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-        // 直接从springIOC容器中获取一个id为student的对象
-        Student student = (Student)context.getBean("student");
+    public static void SpringIOC() {
+        // Spring上下文对象：context
+        ApplicationContext context = new ClassPathXmlApplicationContext("application");
+        // 执行从SpringIOC容器中获取一个id为student的对象
+        Student student = (Student) context.getBean("student");
         System.out.println(student);
-        // 1.new
-        // 2.对象属性的复制
+    }
+
+    public static void learnCourse() {
+        Student student = new Student();
+        student.learnHtml();
+        student.learnJava();
+    }
+
+    public static void learnCourseWithFactory() {
+        Student student = new Student();
+        student.learn("java");
+    }
+
+    public static void main(String[] args) {
+        // learnCourse();
+//         learnCourseWithFactory();
     }
 }
