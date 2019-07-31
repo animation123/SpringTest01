@@ -1,8 +1,11 @@
 package entity;
 
+import factory.CourseFactory;
 import newinstance.HtmlCourse;
 import newinstance.ICourse;
 import newinstance.JavaCourse;
+
+import javax.swing.plaf.ColorUIResource;
 
 public class Student {
     private int stuNo;
@@ -36,6 +39,12 @@ public class Student {
     @Override
     public String toString() {
         return this.stuNo + "," + this.stuName + "," + this.stuAge;
+    }
+
+    public void learn(String name) { // 学习任何课程
+        ICourse course = CourseFactory.getCourse(name);
+        // course就是根据name拿到的相应的课程
+        course.learn();
     }
 
     // 学习Java课程
