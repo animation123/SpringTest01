@@ -31,7 +31,7 @@ public class Test {
         ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
         // 执行从SpringIOC容器中获取一个id为student的对象
         Student student = (Student) context.getBean("student");
-        student.learn("java");
+        student.learn("htmlCourse");
     }
 
     public static void main(String[] args) {
