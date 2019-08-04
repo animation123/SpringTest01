@@ -2,7 +2,32 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:p="http://www.springframework.org/schema/p"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd"
+       default-autowire="byName">
+
+    <!--    配置扫描器-->
+    <context:component-scan base-package="dao"></context:component-scan>
+
+    <!--    配置数据库相关 -事务-->
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"></property>
+        <property name="url" value="jdbc:mysql://localhost:3306/student"></property>
+        <property name="username" value="root"></property>
+        <property name="password" value="12241122---qrx"></property>
+        <property name="maxActive" value="10"></property>
+        <property name="maxIdle" value="6"></property>
+
+    </bean>
+
+    <!--    配置事务管理器txManager-->
+    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
+    <!--    增加对事务的支持-->
+    <tx:annotation-driven transaction-manager="txManager" />
 
     <!-- 该文件中产生的所有对象，被spring放入了一个称之为spring ioc容器的地方 -->
     <!-- id：唯一标识符 class：指定类型 -->
@@ -20,7 +45,13 @@
 
     <bean id="htmlCourse" class="newinstance.HtmlCourse"></bean>
 
-    <bean id="teacher" class="entity.Teacher" p:age="25" p:name="ww">
+<!--    <bean id="studentDao" class="dao.impl.StudentDaoImpl"></bean>-->
+
+
+    <bean id="teacher" class="entity.Teacher">
+        <property name="name">
+            <value>zs</value>
+        </property>
 <!--        通过set方式赋值-->
 <!--        <property name="name" value="zs"></property>-->
 <!--        <property name="age" value="23"></property>-->
@@ -35,16 +66,27 @@
 <!--        <constructor-arg value="ls" type="java.lang.String" index="0" name="name"></constructor-arg>-->
             </bean>
 
-            <bean id="course" class="entity.Course" p:courseHour="300" p:courseName="hadoop" p:teacher-ref="teacher">
-        <!--        <property name="courseName" value="java"></property>-->
-<!--        <property name="courseHour" value="200"></property>-->
-<!--        &lt;!&ndash; 将teacher对象注入到course对象中 &ndash;&gt;-->
-<!--        <property name="teacher" ref="teacher"></property>-->
 
-<!--        <constructor-arg value="c"></constructor-arg>-->
-<!--        <constructor-arg value="100"></constructor-arg>-->
-<!--        <constructor-arg ref="teacher"></constructor-arg>-->
+    <!-- autowire="byName" :
+        Course类中有一个ref属性teacher（属性名），并且该IOC容器中恰好有一个bean的id也是teacher
+        bean的id值=类的属性名
+    -->
+    <bean id="course" class="entity.Course" autowire="byName">
+        <property name="courseName" value="java"></property>
+        <property name="courseHour" value="200"></property>
+<!--        <property name="teacher" ref="teacher"></property>-->
     </bean>
+
+<!--            <bean id="course" class="entity.Course" p:courseHour="300" p:courseName="hadoop" p:teacher-ref="teacher">-->
+<!--        &lt;!&ndash;        <property name="courseName" value="java"></property>&ndash;&gt;-->
+<!--&lt;!&ndash;        <property name="courseHour" value="200"></property>&ndash;&gt;-->
+<!--&lt;!&ndash;        &lt;!&ndash; 将teacher对象注入到course对象中 &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;        <property name="teacher" ref="teacher"></property>&ndash;&gt;-->
+
+<!--&lt;!&ndash;        <constructor-arg value="c"></constructor-arg>&ndash;&gt;-->
+<!--&lt;!&ndash;        <constructor-arg value="100"></constructor-arg>&ndash;&gt;-->
+<!--&lt;!&ndash;        <constructor-arg ref="teacher"></constructor-arg>&ndash;&gt;-->
+<!--    </bean>-->
 
     <bean id="collectionDemo" class="entity.AllCollectionType">
         <!--    通过set方式赋值-->
@@ -104,6 +146,12 @@
                 <prop key="pp4">乒乓球4</prop>
             </props>
         </property>
+    </bean>
+
+    <bean id="studentDao" class="dao.impl.StudentDaoImpl"></bean>
+
+    <bean id="studentService" class="service.StudentServiceImpl">
+        <property name="studentDao" ref="studentDao"></property>
     </bean>
 
 </beans>
