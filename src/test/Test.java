@@ -54,7 +54,7 @@ public class Test {
 //         learnCourse();
 //         learnCourseWithFactory();
 //        learnCourseWithIOC();
-//        testDI();
-        collectionDemo();
+        testDI();
+//        collectionDemo();
     }
 }
