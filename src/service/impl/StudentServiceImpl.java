@@ -17,7 +17,7 @@ public class StudentServiceImpl implements IStudentService {
     @Transactional(readOnly=false, propagation= Propagation.REQUIRED)
     @Override
     public void addStudent(Student student) {
-//        studentDao = null; // 测试异常通知
+        studentDao = null; // 测试异常通知
         // if（该学生是否存在）
         // 增加其他...
         studentDao.addStudent(student);
