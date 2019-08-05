@@ -3,14 +3,19 @@ package dao.impl;
 import dao.IStudentDao;
 import entity.Student;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 /**
  * <bean id="studentDao" class="dao.impl.StudentDaoImpl></bean>
  */
 
-@Component("studentDao")
+//@Component("studentDao")
+//@Service("studentService")
 public class StudentDaoImpl implements IStudentDao {
-    public void addStudent(Student student) {
-        System.out.println("增加学生...");
+    @Override
+    public String queryStudentById() {
+        // 模拟通过JDBC查询数据
+        System.out.println("1   zs  23");
+        return "zs";
     }
 }

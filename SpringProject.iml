@@ -37,5 +37,6 @@
     <orderEntry type="library" name="aspectjweaver-1.5.3" level="project" />
     <orderEntry type="library" name="spring-web-4.3.18.RELEASE" level="project" />
     <orderEntry type="library" name="Spring Web Services-2.0.2" level="project" />
+    <orderEntry type="library" name="Java EE 6-Java EE 6" level="project" />
   </component>
 </module>
