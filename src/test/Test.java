@@ -7,6 +7,7 @@ import factory.CourseFactory;
 import newinstance.ICourse;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import service.IStudentService;
 
 import java.security.AllPermission;
 
@@ -32,6 +33,17 @@ public class Test {
         System.out.println(type);
     }
 
+    public static void testAop() {
+        ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+        IStudentService studentService = (IStudentService) context.getBean("studentService");
+        Student student = new Student();
+        student.setStuAge(23);
+        student.setStuName("zs");
+        studentService.addStudent(student);
+
+        studentService.deleteStudentByNo(1);
+    }
+
     public static void testDI() {
         ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
         Course course = (Course) context.getBean("course");
@@ -54,7 +66,8 @@ public class Test {
 //         learnCourse();
 //         learnCourseWithFactory();
 //        learnCourseWithIOC();
-        testDI();
+//        testDI();
 //        collectionDemo();
+        testAop();
     }
 }
