@@ -63,6 +63,7 @@ public class Test {
     }
 
     public static void main(String[] args) {
+        // Java程序的入口是统一的main()，因此只需要在main中实例化一次applicationContext.xml，就可以实现“IOC容器”初始化操作
 //         learnCourse();
 //         learnCourseWithFactory();
 //        learnCourseWithIOC();
