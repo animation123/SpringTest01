@@ -4,7 +4,8 @@
        xmlns:p="http://www.springframework.org/schema/p"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:tx="http://www.springframework.org/schema/tx"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd"
        default-autowire="byName">
 
     <!--    配置扫描器-->
@@ -150,8 +151,55 @@
 
     <bean id="studentDao" class="dao.impl.StudentDaoImpl"></bean>
 
-    <bean id="studentService" class="service.StudentServiceImpl">
+    <!-- 配置前置通知-->
+    <!-- addStudent()所在方法-->
+    <bean id="studentService" class="service.impl.StudentServiceImpl">
         <property name="studentDao" ref="studentDao"></property>
     </bean>
+
+    <!-- “前置通知”类 -->
+    <!-- ==========连接线的一方========== -->
+    <bean id="logBefore" class="aop.LogBefore"></bean>
+    <!-- 将addStudent()和通知进行关联 -->
+    <aop:config>
+        <!-- 配置切入点（在哪里执行通知） -->
+        <!-- ==========连接线的一方=========== -->
+        <aop:pointcut id="pointcut" expression="execution(public void service.impl.StudentServiceImpl.deleteStudentByNo(int)) or execution(public void service.impl.StudentServiceImpl.addStudent(entity.Student))"/>
+        <!-- advisor：相当于连接切入点和切面的线 -->
+        <!-- ============连接线=========== -->
+        <aop:advisor advice-ref="logBefore" pointcut-ref="pointcut"></aop:advisor>
+    </aop:config>
+
+    <!-- 将通知纳入springIOC容器 -->
+    <bean id="logAfter" class="aop.LogAfter"></bean>
+    <aop:config>
+        <!-- 切入点（连接线的一端：业务类的具体方法） -->
+        <aop:pointcut id="pointcut2" expression="execution(public void service.impl.StudentServiceImpl.addStudent(entity.Student))"/>
+        <!-- （连接线的另一端） -->
+        <aop:advisor advice-ref="logAfter" pointcut-ref="pointcut2"></aop:advisor>
+    </aop:config>
+
+    <!-- 将通知纳入springIOC容器 -->
+    <bean id="logException" class="aop.LogException"></bean>
+    <aop:config>
+        <!-- 切入点（连接线的一端：业务类的具体方法） -->
+        <aop:pointcut id="pointcut3" expression="execution(public void service.impl.StudentServiceImpl.addStudent(entity.Student))"/>
+        <!-- （连接线的另一端） -->
+        <aop:advisor advice-ref="logException" pointcut-ref="pointcut3"></aop:advisor>
+    </aop:config>
+
+    <!-- 将通知纳入springIOC容器 -->
+    <bean id="logAround" class="aop.LogAround"></bean>
+    <aop:config>
+        <!-- 切入点（连接线的一端：业务类的具体方法） -->
+        <aop:pointcut id="pointcut4" expression="execution(public void service.impl.StudentServiceImpl.addStudent(entity.Student))"/>
+        <!-- （连接线的另一端） -->
+        <aop:advisor advice-ref="logAround" pointcut-ref="pointcut4"></aop:advisor>
+    </aop:config>
+
+    <!-- 开启注解对AOP的支持 -->
+    <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+    <context:component-scan base-package="aop"></context:component-scan>
+
 
 </beans>
