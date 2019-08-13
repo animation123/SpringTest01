@@ -15,10 +15,18 @@
         </property>
     </bean>
 
-    <bean id="studentMapper" class="dao.impl.StudentDaoImpl">
-        <!-- 将Spring配置的sqlSessionFactory对象交给mapper(dao) -->
-        <property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
+    <!-- 第一种方式生成mapper对象 -->
+<!--    <bean id="studentMapper" class="dao.impl.StudentDaoImpl">-->
+<!--        &lt;!&ndash; 将Spring配置的sqlSessionFactory对象交给mapper(dao) &ndash;&gt;-->
+<!--        <property name="sqlSessionFactory" ref="sqlSessionFactory"></property>-->
+<!--    </bean>-->
+
+    <!-- 第二种方式生成mapper对象 -->
+    <bean id="studentMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="mapper.StudentMapper"/>
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
     </bean>
+
 
     <bean id="studentService" class="service.impl.StudentServiceImpl">
         <property name="studentMapper" ref="studentMapper"/>
@@ -38,7 +46,8 @@
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
         <!-- 加载mybatis配置文件 -->
-        <property name="configLocation" value="classpath:conf.xml"/>
+<!--        <property name="configLocation" value="classpath:conf.xml"/>-->
+        <property name="mapperLocations" value="mapper/*.xml"/>
     </bean>
 
 <!--    &lt;!&ndash;    配置扫描器&ndash;&gt;-->
