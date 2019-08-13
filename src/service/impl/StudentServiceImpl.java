@@ -1,23 +1,30 @@
 package service.impl;
 
-import dao.IStudentDao;
-import dao.impl.StudentDaoImpl;
 import entity.Student;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
+import mapper.StudentMapper;
 import service.IStudentService;
 
 public class StudentServiceImpl implements IStudentService {
-    @Autowired
-    IStudentDao studentDao;
+    private StudentMapper studentMapper;
 
-    public void setStudentDao(IStudentDao studentDao) {
-        this.studentDao = studentDao;
+    public void setStudentMapper(StudentMapper studentMapper) {
+        this.studentMapper = studentMapper;
     }
 
     @Override
-    public String queryStudentById() {
-        return studentDao.queryStudentById();
+    public void addStudent(Student student) {
+        // 调用dao层
+        studentMapper.addStudent(student);
     }
+    //    @Autowired
+//    IStudentDao studentDao;
+//
+//    public void setStudentDao(IStudentDao studentDao) {
+//        this.studentDao = studentDao;
+//    }
+//
+//    @Override
+//    public String queryStudentById() {
+//        return studentDao.queryStudentById();
+//    }
 }

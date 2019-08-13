@@ -4,10 +4,14 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <!--namespace：该mapper.xml映射文件的唯一标识-->
-<mapper namespace="mapper.studentMapper">
+<mapper namespace="mapper.StudentMapper">
 
     <select id="queryStudentByStuno" parameterType="int" resultType="entity.Student">
             select * from student where stuno = #{stuNo}
     </select>
+
+    <insert id="addStudent" parameterType="entity.Student">
+        insert into student(stuno, stuname, stuage) values(#{stuNo}, #{stuName}, #{stuAge})
+    </insert>
 
 </mapper>

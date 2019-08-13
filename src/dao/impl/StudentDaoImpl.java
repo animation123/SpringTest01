@@ -1,9 +1,9 @@
 package dao.impl;
 
-import dao.IStudentDao;
+import mapper.StudentMapper;
 import entity.Student;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
+import org.apache.ibatis.session.SqlSession;
+import org.mybatis.spring.support.SqlSessionDaoSupport;
 
 /**
  * <bean id="studentDao" class="dao.impl.StudentDaoImpl></bean>
@@ -11,11 +11,17 @@ import org.springframework.stereotype.Service;
 
 //@Component("studentDao")
 //@Service("studentService")
-public class StudentDaoImpl implements IStudentDao {
+public class StudentDaoImpl extends SqlSessionDaoSupport implements StudentMapper {
     @Override
-    public String queryStudentById() {
-        // 模拟通过JDBC查询数据
-        System.out.println("1   zs  23");
-        return "zs";
+    public void addStudent(Student student) {
+        SqlSession session = super.getSqlSession();
+        StudentMapper stuDao = session.getMapper(StudentMapper.class);
+        stuDao.addStudent(student);
     }
+    //    @Override
+//    public String queryStudentById() {
+//        // 模拟通过JDBC查询数据
+//        System.out.println("1   zs  23");
+//        return "zs";
+//    }
 }

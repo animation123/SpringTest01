@@ -1,7 +1,7 @@
-package service;
+package mapper;
 
 import entity.Student;
 
-public interface IStudentService {
+public interface StudentMapper {
     public void addStudent(Student student);
 }

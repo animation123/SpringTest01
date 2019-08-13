@@ -5,5 +5,8 @@
 <configuration>
         <!-- 数据库信息 -->
 
-        <!-- 加载映射文件 -->
+        <!-- 加载映射文件studentMapper.xml -->
+        <mappers>
+                <mapper resource="mapper/studentMapper.xml"/>
+        </mappers>
 </configuration>
