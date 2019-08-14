@@ -11,6 +11,8 @@
     <title>Title</title>
 </head>
 <body>
-        ${requestScope.name}
+        ${requestScope.student.stuNo} -
+        ${requestScope.student.stuName} -
+        ${requestScope.student.stuAge} -
 </body>
 </html>

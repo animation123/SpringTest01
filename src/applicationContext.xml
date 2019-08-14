@@ -6,6 +6,286 @@
        xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+<!--    &lt;!&ndash; 加载db.properties文件 &ndash;&gt;-->
+<!--    <bean id="config" class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">-->
+<!--        <property name="locations">-->
+<!--            <array>-->
+<!--                <value>classpath:db.properties</value>-->
+<!--            </array>-->
+<!--        </property>-->
+<!--    </bean>-->
+
+<!--    &lt;!&ndash; 第一种方式生成mapper对象 &ndash;&gt;-->
+<!--&lt;!&ndash;    <bean id="studentMapper" class="dao.impl.StudentDaoImpl">&ndash;&gt;-->
+<!--&lt;!&ndash;        &lt;!&ndash; 将Spring配置的sqlSessionFactory对象交给mapper(dao) &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;        <property name="sqlSessionFactory" ref="sqlSessionFactory"></property>&ndash;&gt;-->
+<!--&lt;!&ndash;    </bean>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    &lt;!&ndash; 第二种方式生成mapper对象 &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    <bean id="studentMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">&ndash;&gt;-->
+<!--&lt;!&ndash;        <property name="mapperInterface" value="mapper.StudentMapper"/>&ndash;&gt;-->
+<!--&lt;!&ndash;        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>&ndash;&gt;-->
+<!--&lt;!&ndash;    </bean>&ndash;&gt;-->
+
+<!--    &lt;!&ndash; 第三种方式生成mapper对象（批量产生多个mapper）-->
+<!--        批量产生Mapper对象在SpringIOC中的id值默认就是首字母小写的接口名（首字母小写的接口名=id值）-->
+<!--     &ndash;&gt;-->
+<!--    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">-->
+<!--        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>-->
+<!--        &lt;!&ndash; 指定批量产生哪个包中的mapper对象 &ndash;&gt;-->
+<!--        <property name="basePackage" value="mapper"/>-->
+<!--    </bean>-->
+
+<!--    <bean id="studentService" class="service.StudentServiceImpl">-->
+<!--        <property name="studentMapper" ref="studentMapper"/>-->
+<!--    </bean>-->
+
+<!--    &lt;!&ndash; 配置数据库信息（替代Mybatis的配置文件conf.xml） &ndash;&gt;-->
+<!--    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">-->
+<!--        <property name="driverClassName" value="${driver}"/>-->
+<!--        <property name="url" value="${url}"/>-->
+<!--        <property name="username" value="${username}"/>-->
+<!--        <property name="password" value="${password}"/>-->
+<!--        <property name="maxActive" value="${maxActive}"/>-->
+<!--        <property name="maxIdle" value="${maxIdle}"/>-->
+<!--    </bean>-->
+
+<!--    &lt;!&ndash; 在SpringIOC容器中创建Mybatis的核心类SqlSessionFactory &ndash;&gt;-->
+<!--    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">-->
+<!--        <property name="dataSource" ref="dataSource"/>-->
+<!--        &lt;!&ndash; 加载mybatis配置文件 &ndash;&gt;-->
+<!--&lt;!&ndash;        <property name="configLocation" value="classpath:conf.xml"/>&ndash;&gt;-->
+<!--        <property name="mapperLocations" value="mapper/*.xml"/>-->
+<!--    </bean>-->
+
+<!--&lt;!&ndash;    &lt;!&ndash;    配置扫描器&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    <context:component-scan base-package="dao"></context:component-scan>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    &lt;!&ndash;    配置数据库相关 -事务&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">&ndash;&gt;-->
+<!--&lt;!&ndash;        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"></property>&ndash;&gt;-->
+<!--&lt;!&ndash;        <property name="url" value="jdbc:mysql://localhost:3306/student"></property>&ndash;&gt;-->
+<!--&lt;!&ndash;        <property name="username" value="root"></property>&ndash;&gt;-->
+<!--&lt;!&ndash;        <property name="password" value="12241122-&#45;&#45;qrx"></property>&ndash;&gt;-->
+<!--&lt;!&ndash;        <property name="maxActive" value="10"></property>&ndash;&gt;-->
+<!--&lt;!&ndash;        <property name="maxIdle" value="6"></property>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    </bean>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    &lt;!&ndash;    配置事务管理器txManager&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">&ndash;&gt;-->
+<!--&lt;!&ndash;        <property name="dataSource" ref="dataSource"></property>&ndash;&gt;-->
+<!--&lt;!&ndash;    </bean>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    &lt;!&ndash;    增加对事务的支持&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    <tx:annotation-driven transaction-manager="txManager" />&ndash;&gt;-->
+
+<!--&lt;!&ndash;    &lt;!&ndash; 该文件中产生的所有对象，被spring放入了一个称之为spring ioc容器的地方 &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    &lt;!&ndash; id：唯一标识符 class：指定类型 &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;   <bean id="student" class="entity.Student">&ndash;&gt;-->
+<!--&lt;!&ndash;       &lt;!&ndash; property:该class所代表的类的属性&ndash;&gt;-->
+<!--&lt;!&ndash;            name：属性名&ndash;&gt;-->
+<!--&lt;!&ndash;            value:属性值&ndash;&gt;-->
+<!--&lt;!&ndash;        &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;       <property name="stuNo" value="2"></property>&ndash;&gt;-->
+<!--&lt;!&ndash;       <property name="stuName" value="ls"></property>&ndash;&gt;-->
+<!--&lt;!&ndash;       <property name="stuAge" value="24"></property>&ndash;&gt;-->
+<!--&lt;!&ndash;   </bean>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    <bean id="javaCourse" class="newinstance.JavaCourse"></bean>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    <bean id="htmlCourse" class="newinstance.HtmlCourse"></bean>&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;    <bean id="studentDao" class="dao.impl.StudentDaoImpl"></bean>&ndash;&gt;&ndash;&gt;-->
+
+
+<!--&lt;!&ndash;    <bean id="teacher" class="entity.Teacher">&ndash;&gt;-->
+<!--&lt;!&ndash;        <property name="name">&ndash;&gt;-->
+<!--&lt;!&ndash;            <value>zs</value>&ndash;&gt;-->
+<!--&lt;!&ndash;        </property>&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;        通过set方式赋值&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;        <property name="name" value="zs"></property>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;        <property name="age" value="23"></property>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;        通过构造器赋值&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;        <constructor-arg value="24" index="1"></constructor-arg>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;        <constructor-arg value="ls" index="0"></constructor-arg>&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;        <constructor-arg value="24" name="age"></constructor-arg>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;        <constructor-arg value="ls" name="name"></constructor-arg>&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;        <constructor-arg value="24" type="int" index="1" name="age"></constructor-arg>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;        <constructor-arg value="ls" type="java.lang.String" index="0" name="name"></constructor-arg>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;            </bean>&ndash;&gt;-->
+
+
+<!--&lt;!&ndash;    &lt;!&ndash; autowire="byName" :&ndash;&gt;-->
+<!--&lt;!&ndash;        Course类中有一个ref属性teacher（属性名），并且该IOC容器中恰好有一个bean的id也是teacher&ndash;&gt;-->
+<!--&lt;!&ndash;        bean的id值=类的属性名&ndash;&gt;-->
+<!--&lt;!&ndash;    &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;    <bean id="course" class="entity.Course" autowire="byName">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    <bean id="course" class="entity.Course">&ndash;&gt;-->
+<!--&lt;!&ndash;        <property name="courseName" value="java"></property>&ndash;&gt;-->
+<!--&lt;!&ndash;        <property name="courseHour" value="200"></property>&ndash;&gt;-->
+<!--&lt;!&ndash;        <property name="teacher" ref="teacher"></property>&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;        <property name="teacher" ref="teacher"></property>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    </bean>&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;            <bean id="course" class="entity.Course" p:courseHour="300" p:courseName="hadoop" p:teacher-ref="teacher">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;        &lt;!&ndash;        <property name="courseName" value="java"></property>&ndash;&gt;&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;&lt;!&ndash;        <property name="courseHour" value="200"></property>&ndash;&gt;&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;&lt;!&ndash;        &lt;!&ndash; 将teacher对象注入到course对象中 &ndash;&gt;&ndash;&gt;&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;&lt;!&ndash;        <property name="teacher" ref="teacher"></property>&ndash;&gt;&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;&lt;!&ndash;        <constructor-arg value="c"></constructor-arg>&ndash;&gt;&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;&lt;!&ndash;        <constructor-arg value="100"></constructor-arg>&ndash;&gt;&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;&lt;!&ndash;        <constructor-arg ref="teacher"></constructor-arg>&ndash;&gt;&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;    </bean>&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;    <bean id="collectionDemo" class="entity.AllCollectionType">&ndash;&gt;-->
+<!--&lt;!&ndash;        &lt;!&ndash;    通过set方式赋值&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;        <property name="listElement">&ndash;&gt;-->
+<!--&lt;!&ndash;            <list>&ndash;&gt;-->
+<!--&lt;!&ndash;                <value>足球</value>&ndash;&gt;-->
+<!--&lt;!&ndash;                <value>篮球</value>&ndash;&gt;-->
+<!--&lt;!&ndash;                <value>乒乓球</value>&ndash;&gt;-->
+<!--&lt;!&ndash;            </list>&ndash;&gt;-->
+<!--&lt;!&ndash;        </property>&ndash;&gt;-->
+
+<!--&lt;!&ndash;        <property name="arrayElement">&ndash;&gt;-->
+<!--&lt;!&ndash;            <array>&ndash;&gt;-->
+<!--&lt;!&ndash;                <value>足球1</value>&ndash;&gt;-->
+<!--&lt;!&ndash;                <value>篮球1</value>&ndash;&gt;-->
+<!--&lt;!&ndash;                <value>乒乓球1</value>&ndash;&gt;-->
+<!--&lt;!&ndash;            </array>&ndash;&gt;-->
+<!--&lt;!&ndash;        </property>&ndash;&gt;-->
+
+<!--&lt;!&ndash;        <property name="setElement">&ndash;&gt;-->
+<!--&lt;!&ndash;            <set>&ndash;&gt;-->
+<!--&lt;!&ndash;                <value>足球2</value>&ndash;&gt;-->
+<!--&lt;!&ndash;                <value>篮球2</value>&ndash;&gt;-->
+<!--&lt;!&ndash;                <value>乒乓球2</value>&ndash;&gt;-->
+<!--&lt;!&ndash;            </set>&ndash;&gt;-->
+<!--&lt;!&ndash;        </property>&ndash;&gt;-->
+
+<!--&lt;!&ndash;        <property name="mapElement">&ndash;&gt;-->
+<!--&lt;!&ndash;            <map>&ndash;&gt;-->
+<!--&lt;!&ndash;                <entry>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <key>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <value>foot3</value>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </key>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <value>足球</value>&ndash;&gt;-->
+<!--&lt;!&ndash;                </entry>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                <entry>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <key>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <value>basket3</value>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </key>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <value>篮球</value>&ndash;&gt;-->
+<!--&lt;!&ndash;                </entry>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                <entry>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <key>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <value>pp3</value>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </key>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <value>乒乓球3</value>&ndash;&gt;-->
+<!--&lt;!&ndash;                </entry>&ndash;&gt;-->
+<!--&lt;!&ndash;            </map>&ndash;&gt;-->
+<!--&lt;!&ndash;        </property>&ndash;&gt;-->
+
+<!--&lt;!&ndash;        <property name="propsElement">&ndash;&gt;-->
+<!--&lt;!&ndash;            <props>&ndash;&gt;-->
+<!--&lt;!&ndash;                <prop key="foot4">足球4</prop>&ndash;&gt;-->
+<!--&lt;!&ndash;                <prop key="basket4">篮球4</prop>&ndash;&gt;-->
+<!--&lt;!&ndash;                <prop key="pp4">乒乓球4</prop>&ndash;&gt;-->
+<!--&lt;!&ndash;            </props>&ndash;&gt;-->
+<!--&lt;!&ndash;        </property>&ndash;&gt;-->
+<!--&lt;!&ndash;    </bean>&ndash;&gt;-->
+
+<!--&lt;!&ndash;&lt;!&ndash;    <bean id="studentDao" class="dao.impl.StudentDaoImpl"></bean>&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;    &lt;!&ndash; 配置前置通知&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    &lt;!&ndash; addStudent()所在方法&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    <bean id="studentService" class="service.StudentServiceImpl">&ndash;&gt;-->
+<!--&lt;!&ndash;        <property name="studentDao" ref="studentDao"></property>&ndash;&gt;-->
+<!--&lt;!&ndash;    </bean>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    &lt;!&ndash; “前置通知”类 &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    &lt;!&ndash; ==========连接线的一方========== &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    <bean id="logBefore" class="aop.LogBefore"></bean>&ndash;&gt;-->
+<!--&lt;!&ndash;    &lt;!&ndash; 将addStudent()和通知进行关联 &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    <aop:config>&ndash;&gt;-->
+<!--&lt;!&ndash;        &lt;!&ndash; 配置切入点（在哪里执行通知） &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;        &lt;!&ndash; ==========连接线的一方=========== &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;        <aop:pointcut id="pointcut" expression="execution(public void service.StudentServiceImpl.deleteStudentByNo(int)) or execution(public void service.StudentServiceImpl.addStudent(entity.Student))"/>&ndash;&gt;-->
+<!--&lt;!&ndash;        &lt;!&ndash; advisor：相当于连接切入点和切面的线 &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;        &lt;!&ndash; ============连接线=========== &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;        <aop:advisor advice-ref="logBefore" pointcut-ref="pointcut"></aop:advisor>&ndash;&gt;-->
+<!--&lt;!&ndash;    </aop:config>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    &lt;!&ndash; 将通知纳入springIOC容器 &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    <bean id="logAfter" class="aop.LogAfter"></bean>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    &lt;!&ndash; 将准备转为通知的类纳入IOC容器 &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    <bean id="logSchema" class="aop.LogSchema"></bean>&ndash;&gt;-->
+<!--&lt;!&ndash;    <aop:config>&ndash;&gt;-->
+<!--&lt;!&ndash;        &lt;!&ndash; 切入点（连接线的一端：业务类的具体方法） &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;        <aop:pointcut id="pcSchema" expression="execution(public void service.StudentServiceImpl.addStudent(entity.Student))"/>&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;        &lt;!&ndash; （连接线的另一端） &ndash;&gt;&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;        <aop:advisor advice-ref="logSchema" pointcut-ref="pcSchema"></aop:advisor>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;        &lt;!&ndash; schema方式 &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;        <aop:aspect ref="logSchema">&ndash;&gt;-->
+<!--&lt;!&ndash;            &lt;!&ndash; 连接线：连接业务addStudent和通知before &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;            <aop:before method="before" pointcut-ref="pcSchema"/>&ndash;&gt;-->
+<!--&lt;!&ndash;            &lt;!&ndash; 连接线：连接业务addStudent和通知 &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;            <aop:after-returning method="afterReturning" returning="returnValue" pointcut-ref="pcSchema"/>&ndash;&gt;-->
+
+<!--&lt;!&ndash;            <aop:after-throwing method="whenException" throwing="e" pointcut-ref="pcSchema"/>&ndash;&gt;-->
+<!--&lt;!&ndash;            &lt;!&ndash; 环绕 &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;            <aop:around method="around" pointcut-ref="pcSchema"/>&ndash;&gt;-->
+
+<!--&lt;!&ndash;        </aop:aspect>&ndash;&gt;-->
+<!--&lt;!&ndash;    </aop:config>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    <aop:config>&ndash;&gt;-->
+<!--&lt;!&ndash;        &lt;!&ndash; 切入点（连接线的一端：业务类的具体方法） &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;        <aop:pointcut id="pointcut2" expression="execution(public void service.StudentServiceImpl.addStudent(entity.Student))"/>&ndash;&gt;-->
+<!--&lt;!&ndash;        &lt;!&ndash; （连接线的另一端） &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;        <aop:advisor advice-ref="logAfter" pointcut-ref="pointcut2"></aop:advisor>&ndash;&gt;-->
+<!--&lt;!&ndash;    </aop:config>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    &lt;!&ndash; 将通知纳入springIOC容器 &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    <bean id="logException" class="aop.LogException"></bean>&ndash;&gt;-->
+<!--&lt;!&ndash;    <aop:config>&ndash;&gt;-->
+<!--&lt;!&ndash;        &lt;!&ndash; 切入点（连接线的一端：业务类的具体方法） &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;        <aop:pointcut id="pointcut3" expression="execution(public void service.StudentServiceImpl.addStudent(entity.Student))"/>&ndash;&gt;-->
+<!--&lt;!&ndash;        &lt;!&ndash; （连接线的另一端） &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;        <aop:advisor advice-ref="logException" pointcut-ref="pointcut3"></aop:advisor>&ndash;&gt;-->
+<!--&lt;!&ndash;    </aop:config>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    &lt;!&ndash; 将通知纳入springIOC容器 &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    <bean id="logAround" class="aop.LogAround"></bean>&ndash;&gt;-->
+<!--&lt;!&ndash;    <aop:config>&ndash;&gt;-->
+<!--&lt;!&ndash;        &lt;!&ndash; 切入点（连接线的一端：业务类的具体方法） &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;        <aop:pointcut id="pointcut4" expression="execution(public void service.StudentServiceImpl.addStudent(entity.Student))"/>&ndash;&gt;-->
+<!--&lt;!&ndash;        &lt;!&ndash; （连接线的另一端） &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;        <aop:advisor advice-ref="logAround" pointcut-ref="pointcut4"></aop:advisor>&ndash;&gt;-->
+<!--&lt;!&ndash;    </aop:config>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    &lt;!&ndash; 开启注解对AOP的支持 &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    <aop:aspectj-autoproxy></aop:aspectj-autoproxy>&ndash;&gt;-->
+<!--&lt;!&ndash;    <context:component-scan base-package="aop"></context:component-scan>&ndash;&gt;-->
+<!--&lt;!&ndash;    &ndash;&gt;-->
+
+    <!-- 依赖注入：给service注入dao -->
+    <bean id="studentService" class="service.StudentServiceImpl">
+        <property name="studentMapper" ref="studentMapper"/>
+    </bean>
+
+<!--    &lt;!&ndash; 给controller注入service &ndash;&gt;-->
+<!--    <bean id="studentController" class="controller.StudentController">-->
+<!--        <property name="studentService" ref="studentService"/>-->
+<!--    </bean>-->
+
     <!-- 加载db.properties文件 -->
     <bean id="config" class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
         <property name="locations">
@@ -13,23 +293,6 @@
                 <value>classpath:db.properties</value>
             </array>
         </property>
-    </bean>
-
-    <!-- 第一种方式生成mapper对象 -->
-<!--    <bean id="studentMapper" class="dao.impl.StudentDaoImpl">-->
-<!--        &lt;!&ndash; 将Spring配置的sqlSessionFactory对象交给mapper(dao) &ndash;&gt;-->
-<!--        <property name="sqlSessionFactory" ref="sqlSessionFactory"></property>-->
-<!--    </bean>-->
-
-    <!-- 第二种方式生成mapper对象 -->
-    <bean id="studentMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-        <property name="mapperInterface" value="mapper.StudentMapper"/>
-        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
-    </bean>
-
-
-    <bean id="studentService" class="service.impl.StudentServiceImpl">
-        <property name="studentMapper" ref="studentMapper"/>
     </bean>
 
     <!-- 配置数据库信息（替代Mybatis的配置文件conf.xml） -->
@@ -42,229 +305,28 @@
         <property name="maxIdle" value="${maxIdle}"/>
     </bean>
 
+    <!-- conf.xml：数据源、mapper.xml -->
+    <!-- 配置MyBatis需要的核心类：SqlSessionFactory -->
     <!-- 在SpringIOC容器中创建Mybatis的核心类SqlSessionFactory -->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
-        <!-- 加载mybatis配置文件 -->
-<!--        <property name="configLocation" value="classpath:conf.xml"/>-->
-        <property name="mapperLocations" value="mapper/*.xml"/>
+        <!-- 加载mapper.xml路径 -->
+        <property name="mapperLocations" value="classpath:mapper/*.xml"/>
     </bean>
 
-<!--    &lt;!&ndash;    配置扫描器&ndash;&gt;-->
-<!--    <context:component-scan base-package="dao"></context:component-scan>-->
+    <!-- 将MyBatis的SqlSessionFactory交给Spring -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+        <!-- 指定批量产生哪个包中的mapper对象 -->
+        <property name="basePackage" value="mapper"/>
+        <!-- 上面basePackage所在的property的作用：将mapper包中，所有的接口产生阈值对应的动态代理对象
+        （对象名就是首字母小写的接口名）：studentMapper.querystudentByNo();
+        -->
+    </bean>
 
-<!--    &lt;!&ndash;    配置数据库相关 -事务&ndash;&gt;-->
-<!--    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">-->
-<!--        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"></property>-->
-<!--        <property name="url" value="jdbc:mysql://localhost:3306/student"></property>-->
-<!--        <property name="username" value="root"></property>-->
-<!--        <property name="password" value="12241122-&#45;&#45;qrx"></property>-->
-<!--        <property name="maxActive" value="10"></property>-->
-<!--        <property name="maxIdle" value="6"></property>-->
+    <!-- MyBatis:
+        StudentMapper studentMapper = session.getMapper(StudentMapper.class);
+        studentMapper.queryStudentByStuno(31);
+    -->
 
-<!--    </bean>-->
-
-<!--    &lt;!&ndash;    配置事务管理器txManager&ndash;&gt;-->
-<!--    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">-->
-<!--        <property name="dataSource" ref="dataSource"></property>-->
-<!--    </bean>-->
-
-<!--    &lt;!&ndash;    增加对事务的支持&ndash;&gt;-->
-<!--    <tx:annotation-driven transaction-manager="txManager" />-->
-
-<!--    &lt;!&ndash; 该文件中产生的所有对象，被spring放入了一个称之为spring ioc容器的地方 &ndash;&gt;-->
-<!--    &lt;!&ndash; id：唯一标识符 class：指定类型 &ndash;&gt;-->
-<!--   <bean id="student" class="entity.Student">-->
-<!--       &lt;!&ndash; property:该class所代表的类的属性-->
-<!--            name：属性名-->
-<!--            value:属性值-->
-<!--        &ndash;&gt;-->
-<!--       <property name="stuNo" value="2"></property>-->
-<!--       <property name="stuName" value="ls"></property>-->
-<!--       <property name="stuAge" value="24"></property>-->
-<!--   </bean>-->
-
-<!--    <bean id="javaCourse" class="newinstance.JavaCourse"></bean>-->
-
-<!--    <bean id="htmlCourse" class="newinstance.HtmlCourse"></bean>-->
-
-<!--&lt;!&ndash;    <bean id="studentDao" class="dao.impl.StudentDaoImpl"></bean>&ndash;&gt;-->
-
-
-<!--    <bean id="teacher" class="entity.Teacher">-->
-<!--        <property name="name">-->
-<!--            <value>zs</value>-->
-<!--        </property>-->
-<!--&lt;!&ndash;        通过set方式赋值&ndash;&gt;-->
-<!--&lt;!&ndash;        <property name="name" value="zs"></property>&ndash;&gt;-->
-<!--&lt;!&ndash;        <property name="age" value="23"></property>&ndash;&gt;-->
-<!--&lt;!&ndash;        通过构造器赋值&ndash;&gt;-->
-<!--&lt;!&ndash;        <constructor-arg value="24" index="1"></constructor-arg>&ndash;&gt;-->
-<!--&lt;!&ndash;        <constructor-arg value="ls" index="0"></constructor-arg>&ndash;&gt;-->
-
-<!--&lt;!&ndash;        <constructor-arg value="24" name="age"></constructor-arg>&ndash;&gt;-->
-<!--&lt;!&ndash;        <constructor-arg value="ls" name="name"></constructor-arg>&ndash;&gt;-->
-
-<!--&lt;!&ndash;        <constructor-arg value="24" type="int" index="1" name="age"></constructor-arg>&ndash;&gt;-->
-<!--&lt;!&ndash;        <constructor-arg value="ls" type="java.lang.String" index="0" name="name"></constructor-arg>&ndash;&gt;-->
-<!--            </bean>-->
-
-
-<!--    &lt;!&ndash; autowire="byName" :-->
-<!--        Course类中有一个ref属性teacher（属性名），并且该IOC容器中恰好有一个bean的id也是teacher-->
-<!--        bean的id值=类的属性名-->
-<!--    &ndash;&gt;-->
-<!--&lt;!&ndash;    <bean id="course" class="entity.Course" autowire="byName">&ndash;&gt;-->
-<!--    <bean id="course" class="entity.Course">-->
-<!--        <property name="courseName" value="java"></property>-->
-<!--        <property name="courseHour" value="200"></property>-->
-<!--        <property name="teacher" ref="teacher"></property>-->
-<!--&lt;!&ndash;        <property name="teacher" ref="teacher"></property>&ndash;&gt;-->
-<!--    </bean>-->
-
-<!--&lt;!&ndash;            <bean id="course" class="entity.Course" p:courseHour="300" p:courseName="hadoop" p:teacher-ref="teacher">&ndash;&gt;-->
-<!--&lt;!&ndash;        &lt;!&ndash;        <property name="courseName" value="java"></property>&ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;&lt;!&ndash;        <property name="courseHour" value="200"></property>&ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;&lt;!&ndash;        &lt;!&ndash; 将teacher对象注入到course对象中 &ndash;&gt;&ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;&lt;!&ndash;        <property name="teacher" ref="teacher"></property>&ndash;&gt;&ndash;&gt;-->
-
-<!--&lt;!&ndash;&lt;!&ndash;        <constructor-arg value="c"></constructor-arg>&ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;&lt;!&ndash;        <constructor-arg value="100"></constructor-arg>&ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;&lt;!&ndash;        <constructor-arg ref="teacher"></constructor-arg>&ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;    </bean>&ndash;&gt;-->
-
-<!--    <bean id="collectionDemo" class="entity.AllCollectionType">-->
-<!--        &lt;!&ndash;    通过set方式赋值&ndash;&gt;-->
-<!--        <property name="listElement">-->
-<!--            <list>-->
-<!--                <value>足球</value>-->
-<!--                <value>篮球</value>-->
-<!--                <value>乒乓球</value>-->
-<!--            </list>-->
-<!--        </property>-->
-
-<!--        <property name="arrayElement">-->
-<!--            <array>-->
-<!--                <value>足球1</value>-->
-<!--                <value>篮球1</value>-->
-<!--                <value>乒乓球1</value>-->
-<!--            </array>-->
-<!--        </property>-->
-
-<!--        <property name="setElement">-->
-<!--            <set>-->
-<!--                <value>足球2</value>-->
-<!--                <value>篮球2</value>-->
-<!--                <value>乒乓球2</value>-->
-<!--            </set>-->
-<!--        </property>-->
-
-<!--        <property name="mapElement">-->
-<!--            <map>-->
-<!--                <entry>-->
-<!--                    <key>-->
-<!--                        <value>foot3</value>-->
-<!--                    </key>-->
-<!--                    <value>足球</value>-->
-<!--                </entry>-->
-
-<!--                <entry>-->
-<!--                    <key>-->
-<!--                        <value>basket3</value>-->
-<!--                    </key>-->
-<!--                    <value>篮球</value>-->
-<!--                </entry>-->
-
-<!--                <entry>-->
-<!--                    <key>-->
-<!--                        <value>pp3</value>-->
-<!--                    </key>-->
-<!--                    <value>乒乓球3</value>-->
-<!--                </entry>-->
-<!--            </map>-->
-<!--        </property>-->
-
-<!--        <property name="propsElement">-->
-<!--            <props>-->
-<!--                <prop key="foot4">足球4</prop>-->
-<!--                <prop key="basket4">篮球4</prop>-->
-<!--                <prop key="pp4">乒乓球4</prop>-->
-<!--            </props>-->
-<!--        </property>-->
-<!--    </bean>-->
-
-<!--&lt;!&ndash;    <bean id="studentDao" class="dao.impl.StudentDaoImpl"></bean>&ndash;&gt;-->
-
-<!--    &lt;!&ndash; 配置前置通知&ndash;&gt;-->
-<!--    &lt;!&ndash; addStudent()所在方法&ndash;&gt;-->
-<!--    <bean id="studentService" class="service.impl.StudentServiceImpl">-->
-<!--        <property name="studentDao" ref="studentDao"></property>-->
-<!--    </bean>-->
-
-<!--    &lt;!&ndash; “前置通知”类 &ndash;&gt;-->
-<!--    &lt;!&ndash; ==========连接线的一方========== &ndash;&gt;-->
-<!--    <bean id="logBefore" class="aop.LogBefore"></bean>-->
-<!--    &lt;!&ndash; 将addStudent()和通知进行关联 &ndash;&gt;-->
-<!--    <aop:config>-->
-<!--        &lt;!&ndash; 配置切入点（在哪里执行通知） &ndash;&gt;-->
-<!--        &lt;!&ndash; ==========连接线的一方=========== &ndash;&gt;-->
-<!--        <aop:pointcut id="pointcut" expression="execution(public void service.impl.StudentServiceImpl.deleteStudentByNo(int)) or execution(public void service.impl.StudentServiceImpl.addStudent(entity.Student))"/>-->
-<!--        &lt;!&ndash; advisor：相当于连接切入点和切面的线 &ndash;&gt;-->
-<!--        &lt;!&ndash; ============连接线=========== &ndash;&gt;-->
-<!--        <aop:advisor advice-ref="logBefore" pointcut-ref="pointcut"></aop:advisor>-->
-<!--    </aop:config>-->
-
-<!--    &lt;!&ndash; 将通知纳入springIOC容器 &ndash;&gt;-->
-<!--    <bean id="logAfter" class="aop.LogAfter"></bean>-->
-
-<!--    &lt;!&ndash; 将准备转为通知的类纳入IOC容器 &ndash;&gt;-->
-<!--    <bean id="logSchema" class="aop.LogSchema"></bean>-->
-<!--    <aop:config>-->
-<!--        &lt;!&ndash; 切入点（连接线的一端：业务类的具体方法） &ndash;&gt;-->
-<!--        <aop:pointcut id="pcSchema" expression="execution(public void service.impl.StudentServiceImpl.addStudent(entity.Student))"/>-->
-<!--&lt;!&ndash;        &lt;!&ndash; （连接线的另一端） &ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;        <aop:advisor advice-ref="logSchema" pointcut-ref="pcSchema"></aop:advisor>&ndash;&gt;-->
-<!--        &lt;!&ndash; schema方式 &ndash;&gt;-->
-<!--        <aop:aspect ref="logSchema">-->
-<!--            &lt;!&ndash; 连接线：连接业务addStudent和通知before &ndash;&gt;-->
-<!--            <aop:before method="before" pointcut-ref="pcSchema"/>-->
-<!--            &lt;!&ndash; 连接线：连接业务addStudent和通知 &ndash;&gt;-->
-<!--            <aop:after-returning method="afterReturning" returning="returnValue" pointcut-ref="pcSchema"/>-->
-
-<!--            <aop:after-throwing method="whenException" throwing="e" pointcut-ref="pcSchema"/>-->
-<!--            &lt;!&ndash; 环绕 &ndash;&gt;-->
-<!--            <aop:around method="around" pointcut-ref="pcSchema"/>-->
-
-<!--        </aop:aspect>-->
-<!--    </aop:config>-->
-
-<!--    <aop:config>-->
-<!--        &lt;!&ndash; 切入点（连接线的一端：业务类的具体方法） &ndash;&gt;-->
-<!--        <aop:pointcut id="pointcut2" expression="execution(public void service.impl.StudentServiceImpl.addStudent(entity.Student))"/>-->
-<!--        &lt;!&ndash; （连接线的另一端） &ndash;&gt;-->
-<!--        <aop:advisor advice-ref="logAfter" pointcut-ref="pointcut2"></aop:advisor>-->
-<!--    </aop:config>-->
-
-<!--    &lt;!&ndash; 将通知纳入springIOC容器 &ndash;&gt;-->
-<!--    <bean id="logException" class="aop.LogException"></bean>-->
-<!--    <aop:config>-->
-<!--        &lt;!&ndash; 切入点（连接线的一端：业务类的具体方法） &ndash;&gt;-->
-<!--        <aop:pointcut id="pointcut3" expression="execution(public void service.impl.StudentServiceImpl.addStudent(entity.Student))"/>-->
-<!--        &lt;!&ndash; （连接线的另一端） &ndash;&gt;-->
-<!--        <aop:advisor advice-ref="logException" pointcut-ref="pointcut3"></aop:advisor>-->
-<!--    </aop:config>-->
-
-<!--    &lt;!&ndash; 将通知纳入springIOC容器 &ndash;&gt;-->
-<!--    <bean id="logAround" class="aop.LogAround"></bean>-->
-<!--    <aop:config>-->
-<!--        &lt;!&ndash; 切入点（连接线的一端：业务类的具体方法） &ndash;&gt;-->
-<!--        <aop:pointcut id="pointcut4" expression="execution(public void service.impl.StudentServiceImpl.addStudent(entity.Student))"/>-->
-<!--        &lt;!&ndash; （连接线的另一端） &ndash;&gt;-->
-<!--        <aop:advisor advice-ref="logAround" pointcut-ref="pointcut4"></aop:advisor>-->
-<!--    </aop:config>-->
-
-<!--    &lt;!&ndash; 开启注解对AOP的支持 &ndash;&gt;-->
-<!--    <aop:aspectj-autoproxy></aop:aspectj-autoproxy>-->
-<!--    <context:component-scan base-package="aop"></context:component-scan>-->
-<!--    -->
 </beans>

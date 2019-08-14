@@ -11,6 +11,6 @@
     <title>Title</title>
 </head>
 <body>
-        <a href="QueryStudentByIdServlet">查询1号</a>
+        <a href="controller/queryStudentByNo/1">查询1号学生</a>
 </body>
 </html>
